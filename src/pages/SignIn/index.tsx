@@ -25,6 +25,7 @@ import logoImg from '../../assets/logo.png';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import getValidationErrors from '../../utils/getValidationErrors';
+import useAuth from '../../hooks/useAuth';
 
 interface SignInFormData {
   email: string;
@@ -35,6 +36,7 @@ const SignIn: React.FC = () => {
   const navigation = useNavigation();
   const passwordInputRef = useRef<TextInput>(null);
   const formRef = useRef<FormHandles>(null);
+  const { signIn } = useAuth();
 
   const handleSignIn = useCallback(async (data: SignInFormData) => {
     try {
@@ -51,7 +53,7 @@ const SignIn: React.FC = () => {
         abortEarly: false,
       });
 
-      // signIn(data);
+      await signIn(data);
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         formRef.current?.setErrors(getValidationErrors(err));
